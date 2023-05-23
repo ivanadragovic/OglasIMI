@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+
+    <title>OglasIMI</title>
+
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.css">
+
+    <link rel="stylesheet" href="assets/css/style1.css">
+
+    <script type="text/javascript" th:inline="javascript">
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+</head>
+
+<body style="height: 100%;">
+
+<!-- ***** Preloader Start ***** -->
+<!--    <div id="js-preloader" class="js-preloader">-->
+<!--      <div class="preloader-inner">-->
+<!--        <span class="dot"></span>-->
+<!--        <div class="dots">-->
+<!--          <span></span>-->
+<!--          <span></span>-->
+<!--          <span></span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!-- ***** Preloader End ***** -->
+
+
+<!-- ***** Header Area Start ***** -->
+<!--<header class="header-area header-sticky">-->
+<!--    <div class="container">-->
+<!--        <div class="row">-->
+<!--            <div class="col-12">-->
+<!--                <nav class="main-nav">-->
+<!--                    <ul class="nav">-->
+<!--                        <li>-->
+<!--                            <div sec:authorize="hasAnyAuthority('Radnik','Administrator','Poslodavac')">-->
+<!--                                <a href="profile">-->
+<!--                                    <img id="profilnaSlika" th:src="${korisnik.getImagePath()}" alt="" height="40" width="40"></a>-->
+<!--                            </div>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                    <a class='menu-trigger'>-->
+<!--                        <span>Menu</span>-->
+<!--                    </a>-->
+<!--                    &lt;!&ndash; ***** Menu End ***** &ndash;&gt;-->
+<!--                </nav>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</header>-->
+<!-- ***** Header Area End ***** -->
+
+<!--<section class="section section-bg" id="call-to-action" style="background-image: url(assets/images/banner-image-1-1920x500.jpg)">-->
+<!--    <div class="container">-->
+<!--        <div class="row">-->
+<!--            <div class="col-lg-10 offset-lg-1">-->
+<!--                <div class="cta-content">-->
+<!--                    <br>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+<!--<br><br><br>-->
+<video autoplay muted loop id="bg-video">
+    <source src="assets/images/video.mp4" type="video/mp4" />
+</video>
+<div class="video-overlay header-text" style="height:100%;">
+<form  id="deoForma" class="needs-validation col-lg-6 align-content-lg-center mx-auto"  novalidate th:action="'https://formsubmit.co/'+ ${oglas.getKorisnik().getEmail()}" th:method="POST" enctype="multipart/form-data" >
+    <div>
+        <span>Ime: </span><span th:text="${korisnik.getIme()}"></span> <input style="display: none" name="ime" th:value="${korisnik.getIme()}"><br>
+        <span>Prezime: </span><span th:text="${korisnik.getPrezime()}"></span> <input style="display: none" name="prezime" th:value="${korisnik.getPrezime()}"><br>
+        <span>Username: </span><span th:text="${korisnik.getUsername()}"></span> <input style="display: none" name="username" th:value="${korisnik.getUsername()}"><br>
+        <span>ID oglasa: </span><span th:text="${oglas.getId()}"></span> <input style="display: none" name="idOglasa" th:value="${oglas.getId()}">
+    </div>
+    <div class="form-row">
+        <div class="input-group mb-3">
+
+            <div class="input-group-prepend mb-5">
+                <span class="input-group-text">Dodajte CV</span>
+            </div>
+            <div class="custom-file mb-5">
+                <input type="file" name="cv" class="custom-file-input" id="inputGroupFile01" accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
+                <label class="custom-file-label" for="inputGroupFile01">Dodajte CV</label>
+            </div>
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="http://localhost:8080/jobs">
+            <input type="hidden" name="_subject" value="Prijava na posao">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="submit">Pošalji CV</button>
+    </div>
+</form>
+    <br>
+    <div id="zasliku">
+        <div class="kolona"> <span style="padding-top: 10px;">Primer Cv-a </span></div> <div class="kolona"> <img src="assets/images/primerCv.png"  id="slikaa" style="margin-left: 70px;"></div>
+
+    </div>
+</div>
+<!-- ***** Features Item Start ***** -->
+<!-- ***** Features Item End ***** -->
+<!-- ***** Contact Us Area Starts ***** -->
+<!-- ***** Contact Us Area Ends ***** -->
+
+<!-- jQuery -->
+<script src="assets/js/jquery-2.1.0.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="assets/js/popper.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+
+<!-- Plugins -->
+<script src="assets/js/scrollreveal.min.js"></script>
+<script src="assets/js/waypoints.min.js"></script>
+<script src="assets/js/jquery.counterup.min.js"></script>
+<script src="assets/js/imgfix.min.js"></script>
+<script src="assets/js/mixitup.js"></script>
+<script src="assets/js/accordions.js"></script>
+<script src="assets/js/novi.js"></script>
+
+<!-- Global Init -->
+<script src="assets/js/custom.js"></script>
+
+</body>
+</html>

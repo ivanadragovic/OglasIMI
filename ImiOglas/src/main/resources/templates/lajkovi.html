@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+    <title>OglasIMI</title>
+
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.css">
+
+    <link rel="stylesheet" href="assets/css/style1.css">
+
+</head>
+
+<body>
+
+
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="/" class="logo">Oglas<em>Imi</em></a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a href="/">Početna</a></li>
+                        <li><a href="jobs">Poslovi</a></li>
+                        <li><a href="contact">Kontakt</a></li>
+                        <div sec:authorize="hasAuthority('Administrator')">
+                            <li><a href="listaKorisnika">Korisnici</a></li>
+                        </div>
+                        <div sec:authorize="hasAnyAuthority('Poslodavac','Administrator')">
+                            <li><a href="listaMojihOglasa">Moji oglasi</a></li>
+                        </div>
+                        <div sec:authorize="hasAnyAuthority('Poslodavac','Radnik','Administrator')">
+                            <li><a href="lajkovi">Lajkovi</a></li>
+                        </div>
+                        <!--                            <li><a href="profile" th:text="${#authentication.getPrincipal().getUsername()}"></a></li>-->
+
+                        <li>
+                            <div sec:authorize="hasAnyAuthority('Radnik','Administrator','Poslodavac')">
+                                <a href="profile">
+                                    <img id="profilnaSlika" th:src="${k.getImagePath()}" alt="" height="40" width="40"></a>
+                            </div>
+                        </li>
+                        <li>
+                            <form th:action="@{/logout}" method="post">
+                                <input id="dugmeLogout" type="submit" value="LOGOUT" />
+                            </form>
+                        </li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->
+<section class="section section-bg" id="call-to-action" style="background-image: url(static/assets/images/banner-image-1-1920x500.jpg)">
+
+</section>
+<br>
+<div>
+    <br><br><br>
+    <div style="text-align:center; font-size:20px; color:red; font-weight:bold">
+        <span th:utext="${prijavaVecPostoji}"></span>
+    </div>
+    <ul class="list-group col-sm-6 mx-auto" th:each="l:${lajkovi}" th:if="${l.getUserid() == k.getId()}">
+<!--        <li class="list-group-item" style="box-shadow: 0px 0px 15px rgba(0,0,0,0.1);">-->
+            <ul class="list-group col-sm-12" >
+                <li class="border" style="box-shadow: 0px 0px 15px rgba(0,0,0,0.1); padding: 20px">
+
+                    <a th:href="@{'/deleteLajk/'+ ${l.getId()}}" sec:authorize="hasAnyAuthority('Poslodavac','Radnik','Administrator')"  type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span  aria-hidden="true">Izbriši</span>
+                    </a>
+                    <img id="profilnaSlika" th:src="${l.getOglas().getKorisnik().getImagePath()}" alt="" height="40" width="40"/><br>
+                    <span>Poslodavac: </span><span style="color: #6c757d" th:text="${l.getOglas().getKorisnik().username}"></span><br>
+                    <form sec:authorize="hasAnyAuthority('Radnik','Administrator')" th:action="'mailto:' + ${l.getOglas().getKorisnik().getEmail()}">
+                        <button type="submit" style="font-style: italic;color:#222e6b;cursor: pointer;">Posalji email poslodavcu</button><br>
+                    </form>
+                    <span>Radna pozicija: </span><span th:text="${l.getOglas().getRadnaPozicija()}"></span><br>
+                    <span>Plata: </span><span th:text="${l.getOglas().getPlata()}"></span><span>€</span>
+                    <p style="color: black;">Opis posla:</p>
+                    <p style="height: 150px ;overflow: auto;" th:text="${l.getOglas().getOpis()}"></p>
+                    <h4 style="color:#ed563b" th:text="${l.getOglas().getSektor().getNazivSektora()}"></h4>
+                </li>
+
+                <a sec:authorize="hasAnyAuthority('Administrator','Radnik')" th:if="${l.getOglas().getKorisnik().getId()!=k.getId()}" th:href="@{'/jobs/prijavaNaOglass/' + ${l.oglasid}}">
+                    <button  type="button" class="btn btn-primary" th:id="'apliciraj'+${l.oglasid}" style="margin-top: 10px">
+                        Apliciraj za posao
+                    </button>
+                </a>
+            </ul>
+
+<!--        </li>-->
+        <br>
+    </ul>
+</div>
+
+<!-- jQuery -->
+<script src="assets/js/jquery-2.1.0.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="assets/js/popper.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+
+<!-- Plugins -->
+<script src="assets/js/scrollreveal.min.js"></script>
+<script src="assets/js/waypoints.min.js"></script>
+<script src="assets/js/jquery.counterup.min.js"></script>
+<script src="assets/js/imgfix.min.js"></script>
+<script src="assets/js/mixitup.js"></script>
+<script src="assets/js/accordions.js"></script>
+
+<!-- Global Init -->
+<script src="assets/js/custom.js"></script>
+
+</body>
+</html>

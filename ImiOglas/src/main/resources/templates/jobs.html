@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+    <title>OglasIMI</title>
+
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.css">
+
+    <link rel="stylesheet" href="assets/css/style1.css">
+    <script type="text/javascript" th:inline="javascript">
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+
+
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="/" class="logo">Oglas<em>IMI</em></a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a href="index">Početna</a></li>
+                        <li><a href="jobs">Poslovi</a></li>
+                        <li><a href="contact">Kontakt</a></li>
+                        <div sec:authorize="hasAuthority('Administrator')">
+                            <li><a href="listaKorisnika">Korisnici</a></li>
+                        </div>
+                        <div sec:authorize="hasAnyAuthority('Poslodavac','Administrator')">
+                            <li><a href="listaMojihOglasa">Moji oglasi</a></li>
+                        </div>
+
+
+                        <!--                        <li>-->
+                        <!--                            <div sec:authorize="hasAnyAuthority('Radnik','Administrator','Poslodavac')">-->
+                        <!--                                <a href="profile" th:text="${#authentication.getPrincipal().getUsername()}">-->
+
+                        <!--                                </a>-->
+                        <!--                            </div>-->
+                        <!--
+                                             </li>-->
+                        <div sec:authorize="hasAnyAuthority('Poslodavac','Radnik','Administrator')">
+                            <li><a href="lajkovi">Lajkovi</a></li>
+                        </div>
+
+                        <li>
+                            <div sec:authorize="hasAnyAuthority('Radnik','Administrator','Poslodavac')">
+                                <a href="profile">
+                                    <img id="profilnaSlika" th:src="@{${korisnik.getImagePath()}}" alt="" height="40" width="40"></a>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div sec:authorize="hasAnyAuthority('Radnik','Administrator','Poslodavac')">
+                                <form th:action="@{/logout}" method="post">
+                                    <input id="dugmeLogout" type="submit" value="LOGOUT" />
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+<!--                    <a class='menu-trigger'>-->
+<!--                        <span>Meni</span>-->
+<!--                    </a>-->
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->
+
+<!-- ***** Call to Action Start ***** -->
+<section class="section section-bg" id="call-to-action" style="background-image: url(static/assets/images/banner-image-1-1920x500.jpg)">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="cta-content">
+                    <br>
+                    <br>
+                    <h2>Pronađite svoj idealan <em>posao</em></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ***** Call to Action End ***** -->
+
+
+
+
+<!-- ***** Fleet Starts ***** -->
+<div class="container">
+    <br>
+
+
+    <div class="container">
+        <div class="row mx-auto">
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <form th:action="@{/jobs}" method="get">
+                    <label for="txtSearch1">Slobodna pretraga:</label>
+                    <input type="text" class="" name="keyword" id="txtSearch1" placeholder=" Pretražujte ovde...">
+                </form>
+            </div>
+
+
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <form th:action="@{/jobs}">
+                    <label for="txtSearch">Sektori:</label>
+                    <select type="text" class="" name="keyword" id="txtSearch">
+                        <option value="" selected disabled>Izaberite sektor</option>
+                        <option value="Administracija">Administracija</option>
+                        <option value="Bezbednost i zaštita">Bezbednost i zaštita</option>
+                        <option value="Čuvanje i nega dece i odraslih">Čuvanje i nega dece i odraslih</option>
+                        <option value="Fizički poslovi">Fizički poslovi</option>
+                        <option value="Gradjevina">Gradjevina</option>
+                        <option value="Higijena">Higijena</option>
+                        <option value="IT">IT</option >
+                        <option value="Kulinarstvo">Kulinarstvo</option>
+                        <option value="Majstori">Majstori</option >
+                        <option value="Marketing i promocija">Marketing i promocija</option >
+                        <option value="Medicina i farmacija">Medicina i farmacija</option >
+                        <option value="Nega i lepota">Nega i lepota</option >
+                        <option value="Omladinski i studentski poslovi">Omladinski i studentski poslovi</option>
+                        <option value="Poljoprivreda">Poljoprivreda</option>
+                        <option value="Prevoz i dostava">Prevoz i dostava</option>
+                        <option value="Proizvodnja">Proizvodnja</option>
+                        <option value="Skladištenje i logistika">Skladištenje i logistika</option>
+                        <option value="Trgovina i prodaja">Trgovina i prodaja</option>
+                        <option value="Turizam">Turizam</option>
+                        <option value="Ugostiteljstvo">Ugostiteljstvo</option>
+                        <option value="Ostalo">Ostalo</option>
+                    </select>
+                    <input type="submit" value="Pretraži" id="dugmeZaPretrazivanje">
+                </form>
+            </div>
+        </div>
+    </div>
+    <br><br>
+
+    <div  sec:authorize="hasAnyAuthority('Radnik','Administrator')">
+        <a th:href="@{'/jobs/apliciraniposlovi'}">
+            <button  type="button" class="btn btn-primary" style="margin-top: 10px; margin-left: 0px">
+                Vidi aplicirane poslove
+            </button>
+        </a>
+    </div>
+    <br>
+
+    <div>
+        <button sec:authorize="hasAnyAuthority('Poslodavac','Administrator')" id="dugme1" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" data-whatever="@mdo">Dodaj oglas</button>
+    </div>
+    <div style="text-align:center; font-size:20px; color:red; font-weight:bold">
+        <span th:utext="${prijavaVecPostoji}"></span>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" th:each="oglas:${oglasi}">
+            <div class="card" style="max-height: 485px;min-height: 485px; box-shadow: 0px 0px 15px rgba(0,0,0,0.1);">
+                <div class="card-body">
+
+                    <a sec:authorize="hasAnyAuthority('Radnik','Administrator', 'Poslodavac')" th:href="@{'/dodajLajk/'+${oglas.getId()}}">
+                        <button  class="like__btn" sec:authorize="hasAnyAuthority('Radnik','Administrator', 'Poslodavac')">
+                            <!--                        <span>Like</span><br>-->
+                            <span th:text="${oglas.getBrojLajkova()} + '&nbsp'"></span><span id="icon"><i class="far fa-thumbs-up"></i></span>
+                        </button>
+                    </a>
+                    <a sec:authorize="hasAnyAuthority('Administrator')" type="button" class="close" data-dismiss="modal" aria-label="Close" th:href="@{'/delete/' + ${oglas.getId()}}">
+                        <span aria-hidden="true" style="margin-right: 20px; font-size: 15px; font-family: 'Poppins', sans-serif"> Izbriši oglas</span>
+                    </a>
+
+                    <span sec:authorize="hasAnyAuthority('Radnik','Administrator', 'Poslodavac')" style="color:#1b3f5f;font-style: italic;font-size: 12px;" th:each="l:${lajkovi}" th:if="${l.getOglasid()==oglas.getId() && l.getUserid()==korisnik.getId()}"> *Lajkovali ste ovaj oglas. Klikom na dugme "Like" oglas ćete izbaciti iz liste lajkovanih.
+                    <br>
+                    </span>
+                    <img id="profilnaSlika" th:src="${oglas.getKorisnik().getImagePath()}" alt="" height="40" width="40"/><br>
+                    <span>Poslodavac: </span><span style="color: #6c757d" th:text="${oglas.getKorisnik().username}"></span><br>
+                    <form th:if="${oglas.getKorisnik().getId()!=korisnik.getId()}" sec:authorize="hasAnyAuthority('Radnik','Administrator')" th:action="'mailto:' + ${oglas.getKorisnik().getEmail()}">
+                        <button type="submit" style="font-style: italic;color:#222e6b;cursor: pointer;">Pošalji email poslodavcu</button><br>
+                    </form>
+                    <span>Posao:</span><span style="color: #6c757d" th:text="${oglas.getPosao()}"></span><br>
+                    <span>Radna pozicija: </span><span style="color: #6c757d" th:text="${oglas.getRadnaPozicija()}"></span><br>
+                    <span>Plata: </span><span style="color: #6c757d" th:text="${oglas.plata}"></span><span style="color: #6c757d" >€</span><br>
+                    <span>Rad od kuce: </span><span style="color: #6c757d" th:text="${oglas.radOdKuce}"></span><br>
+                    <span id="skriveno"><span>ID oglasa: </span><span style="color: #6c757d" th:text="${oglas.id}"></span><span style="color: #6c757d" ></span></span>
+
+
+                    <p style="color: black;">Opis posla:</p>
+                    <p style="height: 120px ;overflow: auto;" th:text="${oglas.opis}"></p>
+
+                    <h4 style="color:#ed563b" th:text="${oglas.sektor.nazivSektora}"></h4>
+                    <!-- Button trigger modal -->
+<!--                    <div th:if="${oglas.getKorisnik().getId()!=korisnik.getId()}" sec:authorize="hasAnyAuthority('Radnik','Administrator')">-->
+<!--                        <a th:href="@{'/jobs/prijavaNaOglasproba/' + ${oglas.getId()}}">-->
+<!--                            <button id="apliciraj" type="button" class="btn btn-primary" >-->
+<!--                                Da li mogu da apliciram?-->
+<!--                            </button>-->
+<!--                        </a>-->
+<!--                    </div>-->
+                    <div th:if="${oglas.getKorisnik().getId()!=korisnik.getId()}" sec:authorize="hasAnyAuthority('Radnik','Administrator')">
+                        <a th:href="@{'/jobs/prijavaNaOglas/' + ${oglas.getId()}}">
+                            <button  type="button" class="btn btn-primary" th:id="'apliciraj'+${oglas.getId()}" style="margin-top: 10px">
+                                Apliciraj za posao
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+    <br>
+</div>
+
+<!-- ***** Fleet Ends ***** -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" >
+                <h5 class="modal-title" id="exampleModalLabel">Dodaj oglas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/jobs/addNew}" method="post">
+
+                    <div class="form-group">
+                        <label for="sektor" class="col-form-label">Sektor:</label>
+                        <select id="sektor" name="sektorid" required>
+                            <option value="" selected disabled>Izaberi sektor</option>
+                            <option value="1">Administracija</option>
+                            <option value="2">Bezbednost i zaštita</option>
+                            <option value="3">Čuvanje i nega dece i odraslih</option>
+                            <option value="4">Fizički poslovi</option>
+                            <option value="5">Gradjevina</option>
+                            <option value="6">Higijena</option>
+                            <option value="7">IT</option>
+                            <option value="8">Kulinarstvo</option>
+                            <option value="9">Majstori</option>
+                            <option value="10">Marketing i promocija</option>
+                            <option value="11">Medicina i farmacija</option>
+                            <option value="12">Nega i lepota</option>
+                            <option value="13">Omladinski i studentski poslovi</option>
+                            <option value="14">Poljoprivreda</option>
+                            <option value="15">Prevoz i dostava</option>
+                            <option value="16">Proizvodnja</option>
+                            <option value="17">Skladištenje i logistika</option>
+                            <option value="18">Trgovina i prodaja</option>
+                            <option value="19">Turizam</option>
+                            <option value="20">Ugostiteljstvo</option>
+                            <option value="21">Ostalo</option>
+                        </select>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="posao" class="col-form-label">Posao:</label>
+                        <input type="text" class="form-control" id="posao" name="posao" required>
+                        <label for="radnapozicija" class="col-form-label">Radna pozicija:</label>
+                        <input type="text" class="form-control" id="radnapozicija" name="radnaPozicija" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="plata" class="col-form-label">Plata</label>
+                        <input type="text" class="form-control" id="plata" name="plata" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="opis" class="col-form-label">Opis:</label>
+                        <input type="text" class="form-control" id="opis" name="opis" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="radOdKuce" class="col-form-label">Rad od kuce:</label>
+                        <select id="radOdKuce" name="radOdKuce" required>
+                            <option value="" disabled selected>Izaberi</option>
+                            <option value="Da">Da</option>
+                            <option value="Ne">Ne</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Potvrdi</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="assets/js/jquery-2.1.0.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="assets/js/popper.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+
+<!-- Plugins -->
+<script src="assets/js/scrollreveal.min.js"></script>
+<script src="assets/js/waypoints.min.js"></script>
+<script src="assets/js/jquery.counterup.min.js"></script>
+<script src="assets/js/imgfix.min.js"></script>
+<script src="assets/js/mixitup.js"></script>
+<script src="assets/js/accordions.js"></script>
+
+<!-- Global Init -->
+<script src="assets/js/custom.js"></script>
+
+</body>
+</html>
